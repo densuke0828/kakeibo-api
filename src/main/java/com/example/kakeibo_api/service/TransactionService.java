@@ -4,13 +4,13 @@ import com.example.kakeibo_api.dto.MonthlySummaryResponse;
 import com.example.kakeibo_api.dto.TransactionRequest;
 import com.example.kakeibo_api.entity.Transaction;
 import com.example.kakeibo_api.enums.TransactionType;
+import com.example.kakeibo_api.exception.TransactionNotFoundException;
 import com.example.kakeibo_api.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class TransactionService {
     @Transactional(readOnly = false)
     public Transaction updateTransaction(Long id, TransactionRequest request) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("登録データがありません"));
+                .orElseThrow(() -> new TransactionNotFoundException(id));
         transaction.update(request.getAmount(), request.getTransactionType(),
                             request.getCategory(), request.getMemo(), request.getDate());
         return transaction;
@@ -51,7 +51,7 @@ public class TransactionService {
     @Transactional(readOnly = false)
     public void deleteTransaction(Long id) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("登録データがありません"));
+                .orElseThrow(() -> new TransactionNotFoundException(id));
         transactionRepository.delete(transaction);
     }
 
