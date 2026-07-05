@@ -1,5 +1,6 @@
 package com.example.kakeibo_api.dto;
 
+import com.example.kakeibo_api.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
